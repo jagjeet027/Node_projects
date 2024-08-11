@@ -100,77 +100,69 @@
 //     console.log("server is running on port 5511");
 // });
 
+// serverside.js
 
+// serverside.js
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const connectDB = require('./db');
-const Student = require('./models/students');
-const rest_menu = require('./models/menu_list');
+require('dotenv').config();
 
-
-
+const menuItemRoutes = require('./Routes/menuRoutes');
+const studentsInfoRoutes=require('./Routes/studentsRoutes');
 const app = express();
 
-// Connect to database
-connectDB();
+connectDB(); // Connect to MongoDB
 
-// Middleware
 app.use(bodyParser.json());
+app.use(express.json());
 
-// Routes
+app.use('/menu_list', menuItemRoutes);
+app.use('/students', studentsInfoRoutes);
+
 app.get('/', (req, res) => {
-    res.send('Hello, I am jaggie. Meet my advance club where I put all my attention to get the order.');
+  res.send('Hello, I am Jaggie. Meet my advance club where I put all my attention to get the order.');
 });
 
-app.post('/students', async (req, res) => {
-    try {
-        const studentData = new Student(req.body);
-        const savedStudent = await studentData.save();
-        console.log('Data saved successfully');
-        res.status(200).json(savedStudent);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'There is a network issue' });
-    }
-});
+const PORT = process.env.PORT || 8081;
 
-app.post('/menu_list', async (req, res) => {
-    try {
-        const menuData = new rest_menu(req.body);
-        const savedrestdata = await menuData.save();
-        console.log('Data saved successfully');
-        res.status(200).json(savedrestdata);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'There is a network issue' });
-    }
-});
-
-app.post('/menu_list/:tasteType',async(req,res)=>{
-    try{
-        const tasteType=req.params.tasteType;
-        if(tasteType=='Pasta-crazy' || tasteType=='Chowmin' || tasteType=='Pizza' ||tasteType=='FriedRice'||tasteType=='kadhi-chawal'){
-            const menu=await rest_menu.find({name:tasteType});
-            res.status(200).json(menu);
-        }else{
-            console.log('There is no such items available here.')
-            res.status(404).json({error:'Menu not found'});
-        }
-    }catch(err){
-            console.error(err);
-            res.status(500).json({error:'There is a network issue'});
-    }
-})
-
-
-
-const menuItemRoutes=require('./Routes/menuRoutes');
-app.use('/menu_list',menuItemRoutes);
-
-
-// Start server
-const PORT = 5511;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+// // Routes
+// app.get('/', (req, res) => {
+//   res.send('Hello, I am jaggie. Meet my advance club where I put all my attention to get the order.');
+// });
+// app.get('/', async (req, res) => {
+//   try {
+//     const menuItems = await Menu_list.find(); // find() with no arguments is equivalent to find({})
+//     console.log(menuItems); // For debugging purposes only
+//     res.status(200).json(menuItems);
+//   } catch (err) {
+//     console.error(err); // Log the error for debugging
+//     res.status(500).json({ error: 'There is a network issue', message: err.message });
+//   }
+// });
+
+
+
+// const studentRouter = require('./Routes/studentsRoutes');
+// // const MenuList = require('./models/menu_list');
+// // app.use('/students', studentRouter);
+
+// const PORT = process.env.PORT || 8081;
+
+// // app.post("/add-menu",async(req,res)=>{
+// //     const {name,price} = req.body;
+// //     const newItem = await MenuList.create({name,price})
+// //     res.json(newItem)
+// // })
+
+// // Start server
+// app.listen(8081, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });

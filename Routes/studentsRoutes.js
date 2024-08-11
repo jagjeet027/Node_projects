@@ -1,14 +1,13 @@
 const express=require ('express');
 const router=express.Router();
-const Student= require('./.../models/menu_list')
+const Student= require('./../models/menu_list')
 
 
-router.get('/students', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const studentData = new Student(req.body);
-        const savedStudent = await studentData.save();
+        const data = await students.find();
         console.log('Data saved successfully');
-        res.status(200).json(savedStudent);
+        res.status(200).json(data);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'There is a network issue' });

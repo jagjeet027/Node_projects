@@ -1,3 +1,21 @@
+// db.js
+
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    setTimeout(connectDB, 1000); // Retry connection after 1 second
+  }
+};
+
+module.exports = connectDB;
+
+
 // const mongoose=require('mongoose')
 
 
@@ -44,16 +62,20 @@
 // // module.exports = connectDB;
 
 
-const mongoose = require('mongoose');
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect('mongodb+srv://jagjeetjaiswal027:jasusA80@cluster0.13wok3r.mongodb.net/');
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    console.error('MongoDB connection error:', error);
-    process.exit(1);
-  }
-};
 
-module.exports = connectDB;
+// const mongoose = require('mongoose');
+// require('dotenv').config();
+
+// const connectDB = async () => {
+//   try {
+//     await mongoose.connect(process.env.MONGO_URL);
+//     console.log('MongoDB connected successfully');
+//   } catch (error) {
+//     console.error('MongoDB connection error:', error);
+//     // wait 1 second before retrying
+//     setTimeout(connectDB, 1000);
+//   }
+// };
+
+// module.exports = connectDB;
