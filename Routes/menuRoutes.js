@@ -5,15 +5,13 @@ const menu_list= require('./../models/menu_list')
 
 router.get('/menu_list', async (req, res) => {
     try {
-        const menuData = new menu_list(req.body);
-        const savedrestdata = await menuData.save();
-        console.log('Data saved successfully');
-        res.status(200).json(savedrestdata);
+      const menuItems = await menu_lists.find();
+      res.status(200).json(menuItems);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'There is a network issue' });
+      console.error(err);
+      res.status(500).json({ error: 'There is a network issue' });
     }
-});
+  });
 router.post('/menu_list', async (req, res) => {
     try {
         const menuData = new menu_list(req.body);
@@ -29,7 +27,7 @@ router.post('/menu_list', async (req, res) => {
 router.post('/:tasteType',async(req,res)=>{
     try{
         const tasteType=req.params.tasteType;
-        if(tasteType=='Pasta-crazy' || tasteType=='Chowmin' || tasteType=='Pizza' ||tasteType=='FriedRice'||tasteType=='kadhi-chawal'){
+        if(tasteType=='Pasta-crazy' || tasteType=='Chowmin' || tasteType=='Pizza' ||tasteType=='FriedRice'||tasteType=='kadhi-chawal' || tasteType=='french-fries'){
             const menu=await rest_menu.find({name:tasteType});
             res.status(200).json(menu);
         }else{
@@ -49,12 +47,12 @@ router.put('/:id',async(req,res)=>{
         const updatedMenu=await menu_list.findByIdAndUpdate(updatedId,updatedMenuListData,{new:true});
 
         if(!updatedMenu){
-            res.status(200).json(updatedMenu);
+            res.status(200).json(updatedMenuListData);
         }
 
         else{
             console.log('data updated');
-            res.status(200).json(updatedMenuListData);
+            res.status(200).json(updatedMenu);
         }
 
     }catch(err){
